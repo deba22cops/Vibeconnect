@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            overflow: hidden;
+            position: relative;
+        }
+
+        section {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, #f7f7fe, #dff1ff);
+            position: relative;
+            z-index: 1;
+        }
+
+        section .colour {
+            position: absolute;
+            filter: blur(150px);
+        }
+
+        section .colour:nth-child(1) {
+            top: -350px;
+            width: 600px;
+            height: 600px;
+            background: #bf4ad4;
+        }
+
+        section .colour:nth-child(2) {
+            left: 100px;
+            width: 500px;
+            height: 500px;
+            bottom: -150px;
+            background: #ffa500;
+        }
+
+        section .colour:nth-child(3) {
+            right: 100px;
+            bottom: 50px;
+            width: 300px;
+            height: 300px;
+            background: #2b67f3;
+        }
+
+        .box {
+            position: relative;
+            z-index: 2;
+        }
+
+        .box .square {
+            position: absolute;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            animation-delay: calc(-1s * var(--i));
+            animation: animate 10s linear infinite;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes animate {
+            0%,
+            100% {
+                transform: translateY(-40px);
+            }
+
+            50% {
+                transform: translateY(40px);
+            }
+        }
+
+        .box .square:nth-child(1) {
+            top: -50px;
+            left: -60px;
+            width: 100px;
+            height: 100px;
+        }
+
+        .box .square:nth-child(2) {
+            z-index: 2;
+            top: 150px;
+            left: -100px;
+            width: 120px;
+            height: 120px;
+        }
+
+        .box .square:nth-child(3) {
+            z-index: 2;
+            width: 80px;
+            height: 80px;
+            right: -50px;
+            bottom: -60px;
+        }
+
+        .box .square:nth-child(4) {
+            left: 100px;
+            width: 50px;
+            height: 50px;
+            bottom: -80px;
+        }
+
+        .box .square:nth-child(5) {
+            top: -80px;
+            left: 140px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .container {
+            width: 400px;
+            display: flex;
+            min-height: 400px;
+            position: relative;
+            border-radius: 10px;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2;
+        }
+
+        .form {
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: relative;
+        }
+
+        .form h2 {
+            color: #000000;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        .form h2::before {
+            left: 0;
+            width: 80px;
+            height: 4px;
+            content: "";
+            bottom: -10px;
+            background: #080808;
+            position: absolute;
+        }
+
+        .form .input__box {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .form .input__box input {
+            width: 100%;
+            color: #000000;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            letter-spacing: 1px;
+            border-radius: 35px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form ::placeholder {
+            color: #fff;
+        }
+
+        .form .input__box input[type="submit"] {
+            color: #666;
+            cursor: pointer;
+            background: #fff;
+            max-width: 100px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .forget {
+            color: #000000;
+            margin-top: 5px;
+        }
+
+        .forget a {
+            color: #070707;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Social Media Icons */
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons i {
+            font-size: 24px;
+            margin: 0 10px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: #000;
+        }
+
+        /* Rain Animation */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .rain .drop {
+            position: absolute;
+            width: 2px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.6);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        /* Top Corner Text */
+        .top-corner-text {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 32px;
+            color: black;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="colour"></div>
+        <div class="colour"></div>
+        <div class="colour"></div>
+        <div class="box">
+            <div class="square" style="--i: 0"></div>
+            <div class="square" style="--i: 1"></div>
+            <div class="square" style="--i: 2"></div>
+            <div class="square" style="--i: 3"></div>
+            <div class="square" style="--i: 4"></div>
+            <div class="container">
+                <div class="form">
+                    <h2>LOGIN</h2>
+                    <form id="loginForm">
+                        <div class="input__box">
+                            <input type="text" placeholder="Username" id="username" />
+                        </div>
+                        <div class="input__box">
+                            <input type="password" placeholder="Password" id="password" />
+                        </div>
+                        <div class="input__box">
+                            <input type="submit" value="Login" />
+                        </div>
+                        <p class="forget">
+                            Forgot Password? <a href="#">Click Here</a>
+                        </p>
+                        <p class="forget">
+                            Don't have an account? <a href="/register">Sign Up</a>
+                        </p>
+                        <div class="social-icons">
+                            <i class="fa-brands fa-google" id="googleLogin"></i>
+                            <i class="fa-brands fa-meta" id="metaLogin"></i>
+                            <i class="fa-brands fa-facebook" id="facebookLogin"></i>
+                        
+                        </div>
+                        <h5 class="error"></h5>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="rain" id="rain"></div>
+        <div class="top-corner-text">VibeConnect</div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('#loginForm');
+            const username = document.querySelector('#username');
+            const password = document.querySelector('#password');
+            const display = document.querySelector('.error');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                display.textContent = '';
+                try {
+                    const res = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ username: username.value, password: password.value }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const data = await res.json();
+                    if (res.status === 400 || res.status === 401) {
+                        return display.textContent = `${data.message}. ${data.error ? data.error : ''}`;
+                    }
+                    data.role === "admin" ? location.assign('/admin') : location.assign('/basic');
+                } catch (err) {
+                    console.log(err.message);
+                }
+            });
+
+            // Rain animation
+            const rainContainer = document.querySelector('#rain');
+            const numDrops = 100;
+
+            for (let i = 0; i < numDrops; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('drop');
+                drop.style.left = `${Math.random() * 100}vw`;
+                drop.style.animationDuration = `${Math.random() * 1.5 + 0.5}s`;
+                drop.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+                rainContainer.appendChild(drop);
+            }
+
+            // Social media login
+            document.getElementById('googleLogin').addEventListener('click', () => {
+                location.assign('/auth/google');
+            });
+
+            document.getElementById('metaLogin').addEventListener('click', () => {
+                location.assign('/auth/meta');
+            });
+
+            document.getElementById('facebookLogin').addEventListener('click', () => {
+                location.assign('/auth/facebook');
+            });
+        });
+    </script>
+</body>
+
+</html>

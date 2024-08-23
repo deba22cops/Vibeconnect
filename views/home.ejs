@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeConnect</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Pacifico&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <link rel="icon" href="/path/to/your/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ff007f, #ff7f00, #7fff00, #00ff7f, #00ffff, #7f00ff);
+            background-size: 600% 600%;
+            animation: gradient 15s ease infinite;
+            color: #333;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 5rem;
+            color: #fff;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 .fa-rocketchat {
+            font-size: 4rem;
+            margin-left: 10px;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        .button-container {
+            margin-top: 30px;
+        }
+
+        .button {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: #25D366;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-btn {
+            background-color: #128C7E;
+        }
+
+        .register-btn {
+            background-color: #34B7F1;
+        }
+
+        .credit {
+            font-family: 'Pacifico', cursive;
+            font-size: 1rem;
+            color: #fff;
+            margin: 20px 0 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .chat {
+            position: absolute;
+            font-size: 0.8rem;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-rain" id="chatRain"></div>
+    <h1>
+        VibeConnect
+        <i class="fa-brands fa-rocketchat" id="logo"></i>
+    </h1>
+    <div class="button-container">
+        <a href="/login" class="button login-btn">Login</a>
+        <a href="/register" class="button register-btn">Register</a>
+    </div>
+    <div class="credit">
+        by Db
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatRainContainer = document.querySelector('#chatRain');
+            const chats = ['hi', 'hello', 'bye', 'take care', 'asap', , 'kkrh', ];
+            const numChats = 100;
+
+            for (let i = 0; i < numChats; i++) {
+                const chat = document.createElement('div');
+                chat.classList.add('chat');
+                chat.innerHTML = `<i class="bi bi-chat"></i> ${chats[Math.floor(Math.random() * chats.length)]}`;
+                chat.style.left = `${Math.random() * 100}vw`;
+                chat.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                chat.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+                chatRainContainer.appendChild(chat);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeConnect Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(to bottom, #FF512F, #DD2476);
+            animation: sunset 10s infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes sunset {
+            0% {
+                background: linear-gradient(to bottom, #FF512F, #DD2476);
+            }
+            50% {
+                background: linear-gradient(to bottom, #FE6D73, #FF8966);
+            }
+            100% {
+                background: linear-gradient(to bottom, #FF512F, #DD2476);
+            }
+        }
+
+        .chat-area {
+            position: absolute;
+            width: min((100% - 6px), 750px);
+            border: none;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #head {
+            background: rgba(0, 0, 0, 0.15);
+            color: #fff;
+            padding: 24px;
+            padding-top: 12px;
+            font-size: 24px;
+            padding-bottom: 12px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #head .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        #head .icons i {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: min((100% - 6px), 750px);
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #form>button#attach-button {
+            background: #444;
+        }
+
+        #form>button i {
+            font-size: 1.2rem;
+        }
+
+        #messages {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            padding-bottom: 3rem;
+        }
+
+        .bubble {
+            --r: 1em;
+            --t: 1.5em;
+            max-width: 300px;
+            padding-right: 1em;
+            padding-left: 1em;
+            border-inline: var(--t) solid #0000;
+            border-radius: calc(var(--r) + var(--t)) / var(--r);
+            mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%) var(--_p) 100% / var(--t) var(--t) no-repeat, linear-gradient(#000 0 0) padding-box;
+            background: linear-gradient(135deg, #FE6D00, #1384C5) border-box;
+            color: #fff;
+            margin-top: 16px;
+            width: 75%;
+        }
+
+        .bubble>.name {
+            padding: 4px;
+            font-size: 12px;
+            padding-left: 0;
+        }
+
+        .bubble>.msg {
+            font-size: 16px;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+        .bubble>.sent_on {
+            padding: 4px;
+            font-size: 12px;
+            padding-left: 0;
+        }
+
+        .left {
+            --_p: 0;
+            border-bottom-left-radius: 0 0;
+            place-self: start;
+        }
+
+        .right {
+            --_p: 100%;
+            border-bottom-right-radius: 0 0;
+            place-self: end;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-area">
+        <div id="head">
+            <div id="head-title">Chat with <span id="other-username"></span></div>
+            <div class="icons">
+                <i class="fa-solid fa-video" id="video-call"></i>
+                <i class="fa-solid fa-phone" id="voice-call"></i>
+            </div>
+        </div>
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" />
+            <button type="submit"><i class="fa-regular fa-comments"></i></button>
+            <button type="button" id="attach-button"><i class="fa-solid fa-paperclip"></i></button>
+            <input type="file" id="file-input" style="display: none;" />
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+    const head = document.getElementById('head');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+
+    const currUser = JSON.parse('<%- JSON.stringify(currUser) %>');
+    const otherUser = JSON.parse('<%- JSON.stringify(otherUser) %>');
+    const chats = JSON.parse('<%- JSON.stringify(chats) %>');
+
+    const socket = io('localhost:5000');
+
+    const getFormatedDate = (sent) => {
+        const sentDate = moment(sent)
+        const currentDate = moment()
+        let sentOn = ""
+        const diffDays = currentDate.diff(sentDate, 'days');
+        if (diffDays > 364) {
+            return sentDate.format("DD-MM-YYYY")
+        } else if (diffDays > 30) {
+            return sentDate.format("DD-MMM")
+        }
+        return sentDate.format("HH:mm")
+    }
+
+    const setMessage = ({
+        userFrom,
+        userTo,
+        message,
+        sentOn
+    }) => {
+        const fromName = otherUser.id == userFrom ? otherUser.username : 'You'
+        getFormatedDate(sentOn)
+        const item = document.createElement('div');
+        item.className = userFrom == currUser.id ? "bubble right" : "bubble left"
+        item.innerHTML = `
+                <div class="name">${fromName}</div>
+                <div class="msg">${message}</div>
+                <div class="sent_on">${getFormatedDate(sentOn)}</div>
+            `;
+        messages.appendChild(item);
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit("private message", {
+                message: input.value,
+                from: currUser.id,
+                to: otherUser.id
+            });
+            setMessage({
+                userFrom: currUser.id,
+                userTo: otherUser.id,
+                message: input.value,
+                sentOn: new Date()
+            })
+            input.value = '';
+        }
+    });
+
+    socket.on("private message", (msg) => {
+        setMessage(msg)
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    if (Array.isArray(chats)) {
+        chats.map(setMessage)
+    }
+
+    head.innerHTML = otherUser.username
+</script>
+</body>
+</html>
